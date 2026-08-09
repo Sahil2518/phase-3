@@ -1,9 +1,12 @@
 import asyncio
 import os
 import logging
+import json
+import time
+from datetime import datetime
 import pandas as pd
 import numpy as np
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request, Response
 from typing import List, Dict, Any
 
 from src.inference_engine import OptimizedInferenceEngine
@@ -14,6 +17,14 @@ logging.basicConfig(
     format="%(asctime)s | %(levelname)s | %(message)s"
 )
 logger = logging.getLogger(__name__)
+
+# Telemetry Logger
+telemetry_logger = logging.getLogger("telemetry")
+telemetry_logger.setLevel(logging.INFO)
+os.makedirs("logs", exist_ok=True)
+fh = logging.FileHandler(os.path.join("logs", "api_telemetry.log"))
+fh.setFormatter(logging.Formatter("%(message)s"))
+telemetry_logger.addHandler(fh)
 
 app = FastAPI(title="PlaceMux Inference API", version="1.0.0")
 
@@ -78,35 +89,56 @@ async def batch_processor():
         except Exception as e:
             logger.error(f"Batch processor error: {e}")
 
+def log_telemetry(latency_ms: float, status: int, score: float):
+    telemetry = {
+        "timestamp": datetime.utcnow().isoformat(),
+        "latency_ms": latency_ms,
+        "http_status": status,
+        "prediction_score": score
+    }
+    telemetry_logger.info(json.dumps(telemetry))
+
 @app.post("/predict")
-async def predict(payload: Dict[str, Any]):
+async def predict(payload: Dict[str, Any], request: Request, response: Response):
     """
     Predict endpoint for scoring a single record.
     """
-    # Rule 7: API-level Model Unavailability Guard
-    if not MODEL_AVAILABLE:
-        raise HTTPException(status_code=503, detail="Model is currently unavailable.")
-        
-    # Rule 7: Empty input guard
-    if not payload:
-        raise HTTPException(status_code=400, detail="Empty payload provided.")
-        
+    start_time = time.time()
+    score = 0.0
+    status_code = 200
+    
     try:
+        # Rule 7: API-level Model Unavailability Guard
+        if not MODEL_AVAILABLE:
+            raise ValueError("Model is currently unavailable.")
+            
+        # Rule 7: Empty input guard
+        if not payload:
+            raise ValueError("Empty payload provided.")
+            
         if USE_BATCHING:
             # Dynamic Batching Path
             future = asyncio.get_event_loop().create_future()
             await request_queue.put((payload, future))
             score = await future
-            return {"score": score}
         else:
             # Baseline Direct Path
             df = pd.DataFrame([payload])
             scores = engine.predict(df)
-            return {"score": float(scores[0])}
+            score = float(scores[0])
             
     except ValueError as e:
         logger.warning(f"Prediction ValueError: {e}")
-        raise HTTPException(status_code=503, detail=str(e))
+        status_code = 503
+        response.status_code = 503
     except Exception as e:
         logger.error(f"Prediction failed: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail="Internal server error")
+        status_code = 500
+        response.status_code = 500
+    finally:
+        latency_ms = (time.time() - start_time) * 1000
+        log_telemetry(latency_ms, status_code, score)
+        
+    if status_code != 200:
+        return {"detail": "Error occurred"}
+    return {"score": score}
