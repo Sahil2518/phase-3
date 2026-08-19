@@ -1,0 +1,63 @@
+{
+    "models": {
+        "churn_model": {
+            "v1": {
+                "model_name": "churn_model",
+                "version": "v1",
+                "artifact_path": "models/churn_model_v1.pkl",
+                "metrics": {
+                    "auc": 0.9876,
+                    "f1": 0.9504,
+                    "n_val": 2000
+                },
+                "lineage": {
+                    "training_timestamp": "2026-08-19",
+                    "n_train_samples": 10000,
+                    "features": [
+                        "days_since_last_login",
+                        "sessions_last_14d",
+                        "sessions_last_30d",
+                        "apply_rate_7d",
+                        "jobs_viewed_lifetime",
+                        "recruiter_contacts",
+                        "days_since_first_login",
+                        "profile_completeness",
+                        "is_profile_verified"
+                    ],
+                    "training_script": "train_task15.py"
+                },
+                "registered_at": "2026-08-19T09:37:48.835998"
+            },
+            "v2": {
+                "model_name": "churn_model",
+                "version": "v2",
+                "artifact_path": "models/churn_model_v2.pkl",
+                "metrics": {
+                    "auc": 0.9892,
+                    "f1": 0.95,
+                    "n_val": 2000
+                },
+                "lineage": {
+                    "training_timestamp": "2026-08-19",
+                    "n_train_samples": 10000,
+                    "features": [
+                        "days_since_last_login",
+                        "sessions_last_14d",
+                        "sessions_last_30d",
+                        "apply_rate_7d",
+                        "jobs_viewed_lifetime",
+                        "recruiter_contacts",
+                        "days_since_first_login",
+                        "profile_completeness",
+                        "is_profile_verified"
+                    ],
+                    "training_script": "demo_task15.py"
+                },
+                "registered_at": "2026-08-19T09:37:50.881806"
+            }
+        }
+    },
+    "champions": {
+        "churn_model": "v1"
+    }
+}
