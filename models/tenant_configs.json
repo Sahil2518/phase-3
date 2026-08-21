@@ -1,0 +1,14 @@
+{
+    "Ent_A": {
+        "skill_weight": 0.7,
+        "location_weight": 0.1,
+        "seniority_weight": 0.2,
+        "match_threshold": 0.4
+    },
+    "Ent_B": {
+        "skill_weight": 0.4,
+        "location_weight": 0.4,
+        "seniority_weight": 0.2,
+        "match_threshold": 0.7
+    }
+}
