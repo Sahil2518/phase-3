@@ -1,0 +1,190 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "PlaceMux ATS Partner API",
+        "description": "Public API surface for ATS integrations, providing versioned scoring, matching, and explainability.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/match": {
+            "post": {
+                "tags": [
+                    "Matching"
+                ],
+                "summary": "Compute Match",
+                "description": "Computes a match score and explanation between a candidate and a job.\nVersion 1 of the public scoring endpoint for ATS partners.",
+                "operationId": "compute_match_api_v1_match_post",
+                "parameters": [
+                    {
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "X-Api-Key"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MatchRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MatchResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "MatchRequest": {
+                "properties": {
+                    "candidate_skills": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Candidate Skills",
+                        "description": "List of candidate skills"
+                    },
+                    "job_skills": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Job Skills",
+                        "description": "List of required job skills"
+                    },
+                    "candidate_seniority": {
+                        "type": "integer",
+                        "title": "Candidate Seniority",
+                        "description": "Candidate seniority level (1-4)"
+                    },
+                    "job_seniority": {
+                        "type": "integer",
+                        "title": "Job Seniority",
+                        "description": "Required job seniority level (1-4)"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "candidate_skills",
+                    "job_skills",
+                    "candidate_seniority",
+                    "job_seniority"
+                ],
+                "title": "MatchRequest"
+            },
+            "MatchResponse": {
+                "properties": {
+                    "score": {
+                        "type": "number",
+                        "title": "Score",
+                        "description": "Matching score between 0.0 and 1.0"
+                    },
+                    "explanation": {
+                        "type": "string",
+                        "title": "Explanation",
+                        "description": "Plain-English reason for the score"
+                    },
+                    "partner_id": {
+                        "type": "string",
+                        "title": "Partner Id",
+                        "description": "The ID of the calling partner"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "score",
+                    "explanation",
+                    "partner_id"
+                ],
+                "title": "MatchResponse"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    },
+                    "input": {
+                        "title": "Input"
+                    },
+                    "ctx": {
+                        "type": "object",
+                        "title": "Context"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Matching",
+            "description": "Core intelligence endpoints for candidate-to-job matching and scoring."
+        }
+    ]
+}
