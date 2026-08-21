@@ -1,0 +1,44 @@
+{
+    "$defs": {
+        "PersonalizationSignals": {
+            "properties": {
+                "skill_multiplier": {
+                    "default": 1.0,
+                    "description": "Multiplier for skill score",
+                    "title": "Skill Multiplier",
+                    "type": "number"
+                },
+                "seniority_multiplier": {
+                    "default": 1.0,
+                    "description": "Multiplier for seniority score",
+                    "title": "Seniority Multiplier",
+                    "type": "number"
+                }
+            },
+            "title": "PersonalizationSignals",
+            "type": "object"
+        }
+    },
+    "properties": {
+        "user_id": {
+            "description": "Unique user identifier",
+            "title": "User Id",
+            "type": "string"
+        },
+        "org_id": {
+            "description": "Current authorized organization ID",
+            "title": "Org Id",
+            "type": "string"
+        },
+        "signals": {
+            "$ref": "#/$defs/PersonalizationSignals",
+            "description": "User's personal ML signals"
+        }
+    },
+    "required": [
+        "user_id",
+        "org_id"
+    ],
+    "title": "UserContext",
+    "type": "object"
+}
