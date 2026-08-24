@@ -1,0 +1,47 @@
+{
+  "before": {
+    "tag": "baseline",
+    "total_inferences": 200,
+    "total_training_runs": 1,
+    "total_shortlists": 0,
+    "total_cost_usd": 0.0529759,
+    "cost_per_1k_inferences_usd": 0.013779,
+    "avg_inference_latency_ms": 1.3779,
+    "avg_train_cost_usd": 0.05022,
+    "constants": {
+      "cost_per_ms_serve_usd": 1e-05,
+      "cost_per_train_run_usd": 0.05,
+      "cost_per_batch_item_usd": 2.5e-06
+    }
+  },
+  "after": {
+    "tag": "optimized",
+    "total_inferences": 200,
+    "total_training_runs": 0,
+    "total_shortlists": 0,
+    "total_cost_usd": 0.00014087,
+    "cost_per_1k_inferences_usd": 0.000704,
+    "avg_inference_latency_ms": 0.0704,
+    "avg_train_cost_usd": 0.0,
+    "constants": {
+      "cost_per_ms_serve_usd": 1e-05,
+      "cost_per_train_run_usd": 0.05,
+      "cost_per_batch_item_usd": 2.5e-06
+    }
+  },
+  "cost_per_1k_before_usd": 0.013779,
+  "cost_per_1k_after_usd": 0.000704,
+  "cost_saving_pct": 94.89,
+  "latency_before_ms": 1.3779,
+  "latency_after_ms": 0.0704,
+  "latency_saving_pct": 94.89,
+  "verdict": "PASS \u2014 material cost reduction achieved.",
+  "quality_topk_overlap_pct": 100.0,
+  "quality_held_out_queries": [
+    "deep learning computer vision pytorch",
+    "java spring backend microservices",
+    "big query data warehouse spark",
+    "nlp natural language processing",
+    "aws cloud infrastructure"
+  ]
+}

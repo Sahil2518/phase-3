@@ -1,0 +1,9 @@
+{
+    "tenant_A_corp": {
+        "skill_weight": 0.8,
+        "location_weight": 0.1,
+        "seniority_weight": 0.1,
+        "match_threshold": 0.7,
+        "protected_attributes_filter": false
+    }
+}
