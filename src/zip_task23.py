@@ -1,7 +1,7 @@
 """
-zip_task22.py -- PlaceMux Phase 3, Task 22
+zip_task23.py -- PlaceMux Phase 3, Task 23
 ==========================================
-Packages all Task 22 Security Hardening deliverables into a versioned ZIP.
+Packages all Task 23 Compliance Audit deliverables into a versioned ZIP.
 (Rule 1: Always create a ZIP at the end of every full task.)
 """
 
@@ -10,7 +10,7 @@ import os
 import datetime
 import sys
 
-TASK_NUM = 22
+TASK_NUM = 23
 DATE_STR = datetime.date.today().strftime("%Y%m%d")
 ZIP_NAME = f"placemux_task{TASK_NUM:02d}_{DATE_STR}.zip"
 
@@ -21,27 +21,16 @@ INCLUDE_FILES = [
     "README.md",
 ]
 
-TASK_SPECIFIC = [
-    "src/ml_threat_model.py",
-    "src/ranking_defence.py",
-    "src/security_monitor.py",
-    "src/demo_task22_security.py",
-    "src/zip_task22.py",
-    "logs/threat_model.json",
-    "logs/ranking_defence_report.json",
-    "logs/security_monitor_report.json",
-    "logs/task22_security.log",
-]
-
 
 def create_zip() -> None:
-    """Create the ZIP archive for Task 22 Security Hardening deliverables."""
+    """Create the ZIP archive for Task 23 Compliance Audit deliverables."""
     with zipfile.ZipFile(ZIP_NAME, "w", zipfile.ZIP_DEFLATED) as zf:
         for folder in INCLUDE_DIRS:
             if not os.path.isdir(folder):
                 continue
             for root, dirs, files in os.walk(folder):
-                dirs[:] = [d for d in dirs if d not in ("__pycache__", "venv", ".git")]
+                dirs[:] = [d for d in dirs
+                           if d not in ("__pycache__", "venv", ".git")]
                 for file in files:
                     full_path = os.path.join(root, file)
                     zf.write(full_path)

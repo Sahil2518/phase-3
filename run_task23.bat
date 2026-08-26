@@ -1,7 +1,7 @@
 @echo off
 echo =========================================================
-echo PlaceMux Phase 3, Task 22: Security Hardening
-echo Threat Model + Ranking Defence + Scraping/Poison Detection
+echo PlaceMux Phase 3, Task 23: Compliance Audit
+echo DPDP, GDPR ^& SOC 2 Readiness
 echo =========================================================
 
 if exist venv\Scripts\activate (
@@ -11,17 +11,17 @@ if exist venv\Scripts\activate (
 )
 
 echo.
-echo Running Task 22 Security Demo (Stages A-E)...
+echo Running Task 23 Compliance Demo (Stages A-E)...
 echo.
 
-python -m src.demo_task22_security
+python -m src.demo_task23
 
 echo.
 if %errorlevel% neq 0 (
-    echo [ERROR] Security demo failed. Check logs/task22_security.log
+    echo [ERROR] Compliance demo failed. Check logs/task23.log
 ) else (
     echo [SUCCESS] Demo completed. Packaging ZIP...
-    python -m src.zip_task22
+    python -m src.zip_task23
 )
 echo.
 pause
